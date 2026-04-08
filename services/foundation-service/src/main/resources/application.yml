@@ -1,0 +1,55 @@
+spring:
+  application:
+    name: foundation-service
+  config:
+    import: "optional:nacos:gmall-foundation.yml?group=GMALL&refreshEnabled=true"
+  datasource:
+    url: ${GMALL_FOUNDATION_DB_URL:jdbc:postgresql://127.0.0.1:5432/gmall}
+    username: ${GMALL_FOUNDATION_DB_USERNAME:gmall}
+    password: ${GMALL_FOUNDATION_DB_PASSWORD:gmall}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  cloud:
+    nacos:
+      config:
+        enabled: ${GMALL_NACOS_CONFIG_ENABLED:false}
+        server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:8848}
+        username: ${NACOS_USERNAME:nacos}
+        password: ${NACOS_PASSWORD:nacos}
+      discovery:
+        enabled: ${GMALL_NACOS_DISCOVERY_ENABLED:false}
+        server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:8848}
+        username: ${NACOS_USERNAME:nacos}
+        password: ${NACOS_PASSWORD:nacos}
+    sentinel:
+      enabled: ${GMALL_SENTINEL_ENABLED:false}
+      transport:
+        dashboard: ${SENTINEL_DASHBOARD:127.0.0.1:8080}
+    stream:
+      bindings:
+        foundationEvents-out-0:
+          destination: foundation_events
+          content-type: application/json
+      rocketmq:
+        binder:
+          name-server: ${ROCKETMQ_NAME_SERVER:127.0.0.1:9876}
+server:
+  port: ${SERVER_PORT:18080}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+seata:
+  enabled: ${GMALL_SEATA_ENABLED:false}
+  application-id: ${spring.application.name}
+  tx-service-group: ${GMALL_SEATA_TX_GROUP:gmall-foundation-tx-group}
+gmall:
+  decoration-service:
+    base-url: ${GMALL_DECORATION_SERVICE_BASE_URL:http://127.0.0.1:18081/api/decoration}

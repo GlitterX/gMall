@@ -1,0 +1,13 @@
+{
+  "name": "@gmall/sdk",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "dependencies": {
+    "@gmall/shared-types": "workspace:*"
+  },
+  "scripts": {
+    "build": "echo sdk-ready"
+  }
+}

@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/gmall
+    username: gmall
+    password: gmall
+  cloud:
+    nacos:
+      discovery:
+        enabled: true
+    sentinel:
+      enabled: true
+      transport:
+        dashboard: sentinel:8080
+    stream:
+      rocketmq:
+        binder:
+          name-server: rocketmq-namesrv:9876
+server:
+  port: 18081
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+seata:
+  enabled: true
+  tx-service-group: gmall-trade-tx-group

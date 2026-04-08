@@ -1,0 +1,3 @@
+ALTER TABLE trade_cart_item
+    ADD COLUMN business_sku_type VARCHAR(32) NOT NULL DEFAULT 'MERCHANT_OFFER_SKU';
+

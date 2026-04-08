@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: identity-access-service
+  config:
+    import: "optional:nacos:gmall-identity-access-service.yml?group=GMALL&refreshEnabled=true"
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:5432/gmall
+    username: gmall
+    password: gmall
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  cloud:
+    nacos:
+      config:
+        enabled: false
+        server-addr: 127.0.0.1:8848
+        username: nacos
+        password: nacos
+      discovery:
+        enabled: false
+        server-addr: 127.0.0.1:8848
+        username: nacos
+        password: nacos
+    sentinel:
+      enabled: false
+      transport:
+        dashboard: 127.0.0.1:8080
+server:
+  port: 18084
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

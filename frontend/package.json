@@ -1,0 +1,12 @@
+{
+  "name": "gmall-frontend-workspace",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.33.0",
+  "scripts": {
+    "build": "pnpm -r build",
+    "dev:admin": "pnpm --filter @gmall/admin dev",
+    "dev:uniapp": "pnpm --filter @gmall/uniapp dev",
+    "dev:pc": "pnpm --filter @gmall/pc-web dev"
+  }
+}

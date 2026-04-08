@@ -1,0 +1,50 @@
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: gmall
+      POSTGRES_USER: gmall
+      POSTGRES_PASSWORD: gmall
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  nacos:
+    image: nacos/nacos-server:v3.0.1
+    environment:
+      MODE: standalone
+      NACOS_AUTH_ENABLE: "false"
+      NACOS_AUTH_TOKEN: "VGhpcy1pcy1hLXRlc3QtdG9rZW4tZm9yLWdtYWxsLWRldg=="
+      NACOS_AUTH_IDENTITY_KEY: "serverIdentity"
+      NACOS_AUTH_IDENTITY_VALUE: "security"
+    ports:
+      - "8848:8848"
+
+  rocketmq-namesrv:
+    image: apache/rocketmq:5.3.2
+    command: sh mqnamesrv
+    ports:
+      - "9876:9876"
+
+  rocketmq-broker:
+    image: apache/rocketmq:5.3.2
+    depends_on:
+      - rocketmq-namesrv
+    command: sh mqbroker -n rocketmq-namesrv:9876 -c /home/rocketmq/rocketmq-5.3.2/conf/gmall-broker.conf --enable-proxy
+    ports:
+      - "10911:10911"
+      - "10912:10912"
+    volumes:
+      - ./rocketmq/broker.conf:/home/rocketmq/rocketmq-5.3.2/conf/gmall-broker.conf:ro
+
+  seata:
+    image: apache/seata-server:2.6.0
+    environment:
+      SEATA_PORT: 8091
+      STORE_MODE: file
+    ports:
+      - "8091:8091"
+
+volumes:
+  postgres-data:

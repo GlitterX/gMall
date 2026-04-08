@@ -1,0 +1,61 @@
+spring:
+  application:
+    name: decoration-service
+  config:
+    import: "optional:nacos:gmall-decoration.yml?group=GMALL&refreshEnabled=true"
+  datasource:
+    url: ${GMALL_DECORATION_DB_URL:jdbc:postgresql://127.0.0.1:5432/gmall}
+    username: ${GMALL_DECORATION_DB_USERNAME:gmall}
+    password: ${GMALL_DECORATION_DB_PASSWORD:gmall}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  cloud:
+    nacos:
+      config:
+        enabled: ${GMALL_NACOS_CONFIG_ENABLED:false}
+        server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:8848}
+        username: ${NACOS_USERNAME:nacos}
+        password: ${NACOS_PASSWORD:nacos}
+      discovery:
+        enabled: ${GMALL_NACOS_DISCOVERY_ENABLED:false}
+        server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:8848}
+        username: ${NACOS_USERNAME:nacos}
+        password: ${NACOS_PASSWORD:nacos}
+    sentinel:
+      enabled: ${GMALL_SENTINEL_ENABLED:false}
+      transport:
+        dashboard: ${SENTINEL_DASHBOARD:127.0.0.1:8080}
+    stream:
+      bindings:
+        decorationEvents-out-0:
+          destination: decoration_events
+          content-type: application/json
+      rocketmq:
+        binder:
+          name-server: ${ROCKETMQ_NAME_SERVER:127.0.0.1:9876}
+server:
+  port: ${SERVER_PORT:18081}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+seata:
+  enabled: ${GMALL_SEATA_ENABLED:false}
+  application-id: ${spring.application.name}
+  tx-service-group: ${GMALL_SEATA_TX_GROUP:gmall-decoration-tx-group}
+gmall:
+  foundation-service:
+    base-url: ${GMALL_FOUNDATION_SERVICE_BASE_URL:http://127.0.0.1:18080/api/foundation}
+  catalog-service:
+    base-url: ${GMALL_CATALOG_SERVICE_BASE_URL:http://127.0.0.1:18082/api/catalog}
+  marketing-content-service:
+    base-url: ${GMALL_MARKETING_CONTENT_SERVICE_BASE_URL:http://127.0.0.1:18085/api/marketing}
+  outbox:
+    publish-interval-ms: ${GMALL_OUTBOX_PUBLISH_INTERVAL_MS:1000}
